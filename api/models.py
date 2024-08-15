@@ -19,13 +19,13 @@ class Sede(models.Model):
 class ImagenSede(models.Model):
     id = models.AutoField(primary_key=True)
     sede = models.ForeignKey(Sede, on_delete=models.CASCADE, null=False)
-    imagen = models.ImageField(upload_to='sedes-imagenes/')
+    imagen = models.URLField(max_length=250)
 
 
 class UnidadProduccion(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, null=False, blank=False)
-    logo = models.ImageField(upload_to='und-prod-logos/')
+    logo = models.URLField(max_length=250)
     descripcion = models.TextField(null=False, blank=False)
     estado = models.BooleanField(default=True, null=False, blank=False)
     sede = models.ForeignKey(Sede, on_delete=models.SET_NULL,null=True)
@@ -41,11 +41,11 @@ class Produccion(models.Model):
     numero = models.IntegerField(null=False, blank=False)
     estado = models.CharField(max_length=20,choices=Estado.choices, default=Estado.PENDIENTE, null=False, blank=False)
     cantidad = models.IntegerField(null=False)
-    fechaDespacho = models.DateTimeField(null=False, blank=False)
+    fechaDespacho = models.DateTimeField(null=True, blank=True)
     observaciones = models.TextField(null=True, blank=True)
     costoProduccion = models.IntegerField(null=False, blank=False)
     fechaProduccion = models.DateField(null=False, blank=False)
-    fechaVencimineto = models.DateField(null=False, blank=False)
+    fechaVencimiento = models.DateField(null=True, blank=True)
     producto = models.IntegerField(null=False, blank=False)
     unidadProduccion = models.ForeignKey(
         UnidadProduccion, on_delete=models.SET_NULL, null=True)
@@ -65,6 +65,7 @@ class Usuario(models.Model):
         APRENDIZ = "APRENDIZ", ('APRENDIZ')
         INSTRUCTOR = "INSTRUCTOR", ('INSTRUCTOR')
         FUNCIONARIO = "FUNCIONARIO", ('FUNCIONARIO')
+        VENDEDOR = "VENDEDOR", ('VENDEDOR')
         TUTOR = "TUTOR", ('TUTOR')
         LIDER = "LIDER", ('LIDER')
         PUNTO = "PUNTO", ('PUNTO')
@@ -100,14 +101,14 @@ class Usuario(models.Model):
 class FotoUsuario(models.Model):
     id = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE )
-    foto = models.ImageField(upload_to='usuarios-fotos/')
+    foto = models.URLField(max_length=250)
 
 
 class Categorias(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, blank=False, null=False)
-    imagen = models.ImageField(upload_to='categorias-imagenes/')
-    icono = models.FileField(upload_to='categorias-iconos/')
+    imagen = models.URLField(max_length=250)
+    icono = models.URLField(max_length=250)
 
 
 class Producto(models.Model):
@@ -150,7 +151,7 @@ class Favorito(models.Model):
 
 class Imagen(models.Model):
     id = models.AutoField(primary_key=True)
-    imagen = models.ImageField(upload_to='productos-imagenes/')
+    imagen = models.URLField(max_length=250)
     producto = models.ForeignKey(
         Producto, on_delete=models.CASCADE, null=False)
 
@@ -174,12 +175,12 @@ class Anuncio(models.Model):
     eventoIncripcionInicio = models.DateTimeField(null=True)
     eventoIncripcionFin = models.DateTimeField(null=True)
     maxcupos = models.IntegerField(null=True)
-    anexo = models.FileField(upload_to='anuncios-anexo/' ,null=True)
+    anexo = models.URLField(max_length=250, null=True)
 
 
 class ImagenAnuncio(models.Model):
     id = models.AutoField(primary_key=True)
-    imagen = models.ImageField(upload_to='anuncios-imagenes/')
+    imagen = models.URLField(max_length=250)
     anuncio = models.ForeignKey(Anuncio, on_delete=models.CASCADE, null=False)
 
 
@@ -245,6 +246,7 @@ class Factura(models.Model):
     id = models.AutoField(primary_key=True)
     numero = models.IntegerField(null=False, blank=False)
     fecha = models.DateTimeField(null=False, blank=False)
+    usuarioVendedor= models.IntegerField(null=False, blank=False, default=0)
     medioPago = models.ForeignKey(
         MedioPago, on_delete=models.CASCADE, null=False)
     pedido = models.ForeignKey(
