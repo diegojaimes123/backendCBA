@@ -19,13 +19,13 @@ class Sede(models.Model):
 class ImagenSede(models.Model):
     id = models.AutoField(primary_key=True)
     sede = models.ForeignKey(Sede, on_delete=models.CASCADE, null=False)
-    imagen = models.URLField(max_length=250)
+    imagen = models.CharField()
 
 
 class UnidadProduccion(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, null=False, blank=False)
-    logo = models.URLField(max_length=250)
+    logo = models.CharField()
     descripcion = models.TextField(null=False, blank=False)
     estado = models.BooleanField(default=True, null=False, blank=False)
     sede = models.ForeignKey(Sede, on_delete=models.SET_NULL,null=True)
@@ -101,14 +101,14 @@ class Usuario(models.Model):
 class FotoUsuario(models.Model):
     id = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE )
-    foto = models.URLField(max_length=250)
+    foto = models.CharField()
 
 
 class Categorias(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50, blank=False, null=False)
-    imagen = models.URLField(max_length=250)
-    icono = models.URLField(max_length=250)
+    imagen = models.CharField()
+    icono = models.CharField()
 
 
 class Producto(models.Model):
@@ -151,7 +151,7 @@ class Favorito(models.Model):
 
 class Imagen(models.Model):
     id = models.AutoField(primary_key=True)
-    imagen = models.URLField(max_length=250)
+    imagen = models.CharField()
     producto = models.ForeignKey(
         Producto, on_delete=models.CASCADE, null=False)
 
@@ -175,12 +175,12 @@ class Anuncio(models.Model):
     eventoIncripcionInicio = models.DateTimeField(null=True)
     eventoIncripcionFin = models.DateTimeField(null=True)
     maxcupos = models.IntegerField(null=True)
-    anexo = models.URLField(max_length=250, null=True)
+    anexo =  models.CharField(null=True)
 
 
 class ImagenAnuncio(models.Model):
     id = models.AutoField(primary_key=True)
-    imagen = models.URLField(max_length=250)
+    imagen =  models.CharField()
     anuncio = models.ForeignKey(Anuncio, on_delete=models.CASCADE, null=False)
 
 
